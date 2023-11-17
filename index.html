@@ -1,0 +1,35 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Teaching Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Homepage -->
+<div id="homepage">
+    <h1>Spelling Teaching Website</h1>
+    <label for="gradeSelect">Select Grade:</label>
+    <select id="gradeSelect">
+        <option value="1">Grade 1</option>
+        <option value="2">Grade 2</option>
+        <!-- Add more grade options as needed -->
+    </select>
+    <button id="startLearningBtn">Start Learning</button>
+</div>
+
+<!-- Word Display Page -->
+<div id="wordDisplay" style="display: none;">
+    <h2>Word Display</h2>
+    <div id="wordButtons">
+        <!-- Word buttons will be dynamically added here -->
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
