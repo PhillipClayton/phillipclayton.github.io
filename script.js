@@ -96,16 +96,3 @@ function speakWord(word) {
         console.error('SpeechSynthesis API not supported in this browser.');
     }
 }
-
-/* Example usage
-const wordToSpeak = 'apple';
-speakWord(wordToSpeak);
-*/
-
-/* Example usage in the context of your application
-const wordButton = document.getElementById('wordButton1'); // Replace with the actual ID of your button
-wordButton.addEventListener('click', () => {
-    const wordToSpeak = 'apple'; // Replace with the actual word associated with the button
-    speakWord(wordToSpeak);
-});
-*/ 
