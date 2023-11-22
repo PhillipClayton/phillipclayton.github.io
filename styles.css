@@ -1,1 +1,76 @@
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+#homepage {
+    text-align: center;
+    padding: 50px;
+}
+
+h1 {
+    color: #1a73e8;
+}
+
+label {
+    font-size: 18px;
+    color: #333;
+}
+
+#gradeSelect {
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 8px;
+    border: 2px solid #1a73e8;
+    border-radius: 5px;
+}
+
+#startLearningBtn {
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+#startLearningBtn:hover {
+    background-color: #1558a3;
+}
+
+#wordDisplay {
+    text-align: center;
+    display: none;
+    padding: 20px;
+}
+
+h2 {
+    color: #1a73e8;
+}
+
+#wordButtons {
+    margin-top: 20px;
+}
+
+/* Styling for word buttons (you may need to adjust based on your design) */
+#wordButtons button {
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#wordButtons button:hover {
+    background-color: #1558a3;
+}
 
