@@ -8,17 +8,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const gradeSelect = document.getElementById('gradeSelect');
         const selectedGrade = gradeSelect.value;
         
-        // Load all words from selected grade word bank
-        const testWords = []
-        testWords = loadWordBank(selectedGrade);
+        // Load all words from selected grade's word bank
+        const selectedWordBank = []
+        selectedWordBank = loadWordBank(selectedGrade);
 
         // Randomnly select 10 words from the bank
-        const wordToTest = []
-        wordToTest = getRandomWordsFromArray(testWords)
+        const wordsToTest = []
+        wordsToTest = getRandomWordsFromArray(selectedWordBank)
 
         // Generate a button for each word
         // When pressed, each button speaks the word but doesn't display it
-        
+        generateWordButtons(wordsToTest)
     });
 });
 
@@ -54,7 +54,7 @@ function parseCSV(csvData) {
     return wordBank;
 }
 
-// Function to get 10 random words from an array
+// Get 10 random words from an array
 function getRandomWordsFromArray(words) {
     const shuffledWords = shuffleArray(words); // Shuffle the words
     return shuffledWords.slice(0, 10); // Take the first 10 words
@@ -70,9 +70,24 @@ function shuffleArray(array) {
     return shuffledArray;
 }
 
+// Generate word buttons in the "wordDisplay" div
+function generateWordButtons(words) {
+    const wordButtonsContainer = document.getElementById('wordButtons');
 
+    // Clear existing buttons
+    wordButtonsContainer.innerHTML = '';
 
-// Function to speak a given word using the Web Speech API
+    // Create buttons for each word
+    words.forEach((word, index) => {
+        const button = document.createElement('button');
+        button.textContent = `Word ${index + 1}`;
+        button.value = word; // Set the value to the corresponding word
+        // button.addEventListener('click', handleWordButtonClick); // Attach a click event listener
+        wordButtonsContainer.appendChild(button);
+    });
+}
+
+// Speak a given word using the Web Speech API
 function speakWord(word) {
     // Check if the browser supports the SpeechSynthesis API
     if ('speechSynthesis' in window) {
