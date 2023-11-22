@@ -1,4 +1,3 @@
-
 // Button listener for displaying the buttons for spelling
 document.addEventListener('DOMContentLoaded', function () {
     const startLearningBtn = document.getElementById('startLearningBtn');
@@ -35,24 +34,15 @@ async function loadWordBank(grade) {
 
 // Parse CSV data
 function parseCSV(csvData) {
-    const lines = csvData.split(',');
-    // const headers = lines[0].split(',');
-
+    const lines = csvData.split('\n');
     let wordBank = [];
-    lines.forEach(word, wordBank.push());    
 
-    /* 
-    for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',');
-        let entry = {};
-
-        for (let j = 0; j < headers.length; j++) {
-            entry[headers[j]] = values[j];
+    lines.forEach(line => {
+        const word = line.trim();
+        if (word) {
+            wordBank.push(word);
         }
-
-        wordBank.push(entry);
-    }
-    */
+    });
 
     return wordBank;
 }
