@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedGrade = gradeSelect.value;
         
         // Load all words from selected grade's word bank
-        const selectedWordBank = []
+        let selectedWordBank = []
         selectedWordBank = loadWordBank(selectedGrade);
 
         // Randomnly select 10 words from the bank
-        const wordsToTest = []
+        let wordsToTest = []
         wordsToTest = getRandomWordsFromArray(selectedWordBank)
 
         // Generate a button for each word
@@ -38,11 +38,11 @@ function parseCSV(csvData) {
     const lines = csvData.split('\n');
     const headers = lines[0].split(',');
 
-    const wordBank = [];
+    let wordBank = [];
 
     for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',');
-        const entry = {};
+        let entry = {};
 
         for (let j = 0; j < headers.length; j++) {
             entry[headers[j]] = values[j];
