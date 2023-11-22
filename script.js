@@ -46,20 +46,14 @@ function parseCSV(csvData) {
     return wordBank;
 }
 
-// Get 10 random words from an array
-function getRandomWordsFromArray(wordsArray) {
-    let selectedRandomnWords = getRandomWords(wordsArray);
-    return selectedRandomnWords;
-}
-
 // Get random words from the array
-function getRandomWords(fullArray) {
+function getRandomWordsFromArray(fullArray) {
     let randomWords = [];
     
     for (let i = 0; i < 10; i++) {
         const j = Math.floor(Math.random() * fullArray.length - 1);
-        shuffledArray.push(fullArray[j]);
-        temp_value = fullArray[fullArray.length -1];
+        randomWords.push(fullArray[j]);
+        temp_value = fullArray[fullArray.length - 1];
         fullArray[fullArray.length - 1] = fullArray[j];
         fullArray[j] = temp_value;
         fullArray.pop();
@@ -78,7 +72,7 @@ function generateWordButtons(words) {
         const button = document.createElement('button');
         button.textContent = `Word ${index + 1}`;
         button.value = word; // Set the value to the corresponding word
-        // button.addEventListener('click', handleWordButtonClick); // Attach a click event listener
+        button.addEventListener('click', speakWord(word)); // Attach a click event listener
         wordButtonsContainer.appendChild(button);
     });
 }
