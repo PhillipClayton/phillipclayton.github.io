@@ -55,14 +55,15 @@ function parseCSV(csvData) {
 }
 
 // Get 10 random words from an array
-function getRandomWordsFromArray(words) {
-    const shuffledWords = shuffleArray(words); // Shuffle the words
+function getRandomWordsFromArray(wordsArray) {
+    let shuffledWords = []
+    shuffledWords = shuffleArray(wordsArray); // Shuffle the words
     return shuffledWords.slice(0, 10); // Take the first 10 words
 }
 
 // Function to shuffle an array
-function shuffleArray(array) {
-    const shuffledArray = array.slice();
+function shuffleArray(arrayToShuffle) {
+    let shuffledArray = arrayToShuffle;
     for (let i = shuffledArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
