@@ -8,12 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedGrade = gradeSelect.value;
         
         // Load all words from selected grade's word bank
-        let selectedWordBank = []
-        selectedWordBank = loadWordBank(selectedGrade);
+        let selectedWordBank = loadWordBank(selectedGrade);
 
         // Randomnly select 10 words from the bank
-        let wordsToTest = []
-        wordsToTest = getRandomWordsFromArray(selectedWordBank)
+        let wordsToTest = getRandomWordsFromArray(selectedWordBank)
 
         // Generate a button for each word
         // When pressed, each button speaks the word but doesn't display it
@@ -26,7 +24,8 @@ async function loadWordBank(grade) {
     try {
         const response = await fetch(`WordBanks/Grade${grade}.csv`);
         const csvData = await response.text();
-        return parseCSV(csvData);
+        wordsForGrade = parseCSV(csvData);
+        return wordsForGrade;
     } catch (error) {
         throw new Error(`Error loading word bank for grade ${grade}: ${error.message}`);
     }
@@ -49,21 +48,23 @@ function parseCSV(csvData) {
 
 // Get 10 random words from an array
 function getRandomWordsFromArray(wordsArray) {
-    let shuffledWords = [];
-    shuffledWords = shuffleArray(wordsArray); // Shuffle the words
-    return shuffledWords.slice(0, 10); // Take the first 10 words
+    let selectedRandomnWords = getRandomWords(wordsArray);
+    return selectedRandomnWords;
 }
 
-// Function to shuffle an array
-function shuffleArray(arrayToShuffle) {
-    let shuffledArray = arrayToShuffle.slice();
-
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+// Get random words from the array
+function getRandomWords(fullArray) {
+    let randomWords = [];
+    
+    for (let i = 0; i < 10; i++) {
+        const j = Math.floor(Math.random() * fullArray.length - 1);
+        shuffledArray.push(fullArray[j]);
+        temp_value = fullArray[fullArray.length -1];
+        fullArray[fullArray.length - 1] = fullArray[j];
+        fullArray[j] = temp_value;
+        fullArray.pop();
     }
-
-    return shuffledArray;
+    return randomWords;
 }
 // Generate word buttons in the "wordDisplay" div
 function generateWordButtons(words) {
