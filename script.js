@@ -35,11 +35,13 @@ async function loadWordBank(grade) {
 
 // Parse CSV data
 function parseCSV(csvData) {
-    const lines = csvData.split('\n');
-    const headers = lines[0].split(',');
+    const lines = csvData.split(',');
+    // const headers = lines[0].split(',');
 
     let wordBank = [];
+    lines.forEach(word, wordBank.push());    
 
+    /* 
     for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',');
         let entry = {};
@@ -50,13 +52,14 @@ function parseCSV(csvData) {
 
         wordBank.push(entry);
     }
+    */
 
     return wordBank;
 }
 
 // Get 10 random words from an array
 function getRandomWordsFromArray(wordsArray) {
-    let shuffledWords = []
+    let shuffledWords = [];
     shuffledWords = shuffleArray(wordsArray); // Shuffle the words
     return shuffledWords.slice(0, 10); // Take the first 10 words
 }
