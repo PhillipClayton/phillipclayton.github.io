@@ -56,7 +56,7 @@ function getRandomWordsFromArray(fullArray) {
         temp_value = fullArray[fullArray.length - 1];
         fullArray[fullArray.length - 1] = fullArray[j];
         fullArray[j] = temp_value;
-        fullArray.pop();
+        fullArray = fullArray.pop();
     }
     return randomWords;
 }
