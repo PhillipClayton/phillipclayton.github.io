@@ -67,9 +67,11 @@ function generateWordButtons(words) {
         const button = document.createElement('button');
         button.textContent = `Word ${index + 1}`;
         button.value = word; // Set the value to the corresponding word
-        button.addEventListener('click', speakWord(word)); // Attach a click event listener
+        button.addEventListener('click', () => speakWord(word)); // Attach a click event listener
         wordButtonsContainer.appendChild(button);
     });
+
+    //wordButtonsContainer.style.display = 'block';
 }
 
 // Speak a given word using the Web Speech API
@@ -83,7 +85,14 @@ async function speakWord(word) {
         utterance.text = word;
 
         // Use the default voice (you can customize this if needed)
-        utterance.voice = speechSynthesis.getVoices()[0];
+        // Wait for the voices to be loaded before setting the voice
+        if (speechSynthesis.getVoices().length === 0) {
+            speechSynthesis.onvoiceschanged = function() {
+                utterance.voice = speechSynthesis.getVoices()[0];
+            };
+        } else {
+            utterance.voice = speechSynthesis.getVoices()[0];
+        }
 
         // Speak the word
         speechSynthesis.speak(utterance);
