@@ -83,19 +83,21 @@ async function speakWord(word) {
 
         // Set the text to be spoken
         utterance.text = word;
+        utterance.lang = 'en-US';
 
         // Use the default voice (you can customize this if needed)
         // Wait for the voices to be loaded before setting the voice
         if (speechSynthesis.getVoices().length === 0) {
             speechSynthesis.onvoiceschanged = function() {
-                utterance.voice = speechSynthesis.getVoices()[0];
+                utterance.voice = speechSynthesis.getVoices()[1];
+                // Speak the word
+                speechSynthesis.speak(utterance);
             };
         } else {
-            utterance.voice = speechSynthesis.getVoices()[0];
+            utterance.voice = speechSynthesis.getVoices()[1];
+            // Speak the word
+            speechSynthesis.speak(utterance);
         }
-
-        // Speak the word
-        speechSynthesis.speak(utterance);
     } else {
         console.error('SpeechSynthesis API not supported in this browser.');
     }
