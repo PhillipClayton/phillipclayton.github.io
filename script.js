@@ -2,13 +2,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     const startLearningBtn = document.getElementById('startLearningBtn');
     
-    startLearningBtn.addEventListener('click', function () {
+    startLearningBtn.addEventListener('click', async function () {
         // Get the selected grade value
         const gradeSelect = document.getElementById('gradeSelect');
         const selectedGrade = gradeSelect.value;
         
         // Load all words from selected grade's word bank
-        let selectedWordBank = loadWordBank(selectedGrade);
+        let selectedWordBank = await loadWordBank(selectedGrade);
 
         // Randomnly select 10 words from the bank
         let wordsToTest = getRandomWordsFromArray(selectedWordBank)
@@ -25,6 +25,8 @@ async function loadWordBank(grade) {
         const response = await fetch(`WordBanks/Grade${grade}.csv`);
         const csvData = await response.text();
         wordsForGrade = parseCSV(csvData);
+        console.log("wordsForGrade is an " + typeof wordsForGrade);
+
         return wordsForGrade;
     } catch (error) {
         throw new Error(`Error loading word bank for grade ${grade}: ${error.message}`);
@@ -33,21 +35,15 @@ async function loadWordBank(grade) {
 
 // Parse CSV data
 function parseCSV(csvData) {
-    const lines = csvData.split('\n');
-    let wordBank = [];
-
-    lines.forEach(line => {
-        const word = line.trim();
-        if (word) {
-            wordBank.push(word);
-        }
-    });
-
-    return wordBank;
+    const words = csvData.split(',');
+    return words.map(word => word.trim()); // Trim whitespace from each word
 }
 
 // Get random words from the array
 function getRandomWordsFromArray(fullArray) {
+    if (!Array.isArray(fullArray)) {
+        throw new Error('fullArray must be an array');
+    }
     let randomWords = [];
     
     for (let i = 0; i < 10; i++) {
@@ -78,7 +74,7 @@ function generateWordButtons(words) {
 }
 
 // Speak a given word using the Web Speech API
-function speakWord(word) {
+async function speakWord(word) {
     // Check if the browser supports the SpeechSynthesis API
     if ('speechSynthesis' in window) {
         // Create a SpeechSynthesisUtterance object
