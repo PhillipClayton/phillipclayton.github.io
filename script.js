@@ -25,7 +25,6 @@ async function loadWordBank(grade) {
         const response = await fetch(`WordBanks/Grade${grade}.csv`);
         const csvData = await response.text();
         wordsForGrade = parseCSV(csvData);
-        console.log("wordsForGrade is an " + typeof wordsForGrade);
 
         return wordsForGrade;
     } catch (error) {
