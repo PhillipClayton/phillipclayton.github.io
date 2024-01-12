@@ -76,8 +76,8 @@ function generateWordButtons(words) {
     words.forEach((wordObj, index) => {
         const button = document.createElement('button');
         button.textContent = `Word ${index + 1}`;
-        button.value = wordObj.word; // Set the value to the corresponding word
-        button.addEventListener('click', () => speakWord(wordObj.word + ',' + wordObj.sentence)); // Attach a click event listener
+        button.value = index; // Set the value to the index of the word in the array
+        button.addEventListener('click', () => speakWord(words[button.value].word + ',' + words[button.value].sentence)); // Attach a click event listener
         wordButtonsContainer.appendChild(button);
     });
 }
