@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Load the word bank for a given grade from a CSV file
 async function loadWordBank(grade) {
     try {
-        const response = await fetch(`WordBanks/Grade${grade}.csv`);
+        const response = await fetch(`WordBanks/GradeSentences${grade}.csv`);
         const csvData = await response.text();
         wordsForGrade = parseCSV(csvData);
 
@@ -34,8 +34,17 @@ async function loadWordBank(grade) {
 
 // Parse CSV data
 function parseCSV(csvData) {
-    const words = csvData.split(',');
-    return words.map(word => word.trim()); // Trim whitespace from each word
+    const lines = csvData.split('\n');
+    return lines.map(line => {
+        let word, sentence;
+        if (line.includes(',')) {
+            [word, sentence] = line.split(',');
+        } else {
+            word = line;
+            sentence = '';
+        }
+        return { word: word.trim(), sentence: sentence.trim() };
+    });
 }
 
 // Get random words from the array
@@ -46,15 +55,16 @@ function getRandomWordsFromArray(fullArray) {
     let randomWords = [];
     
     for (let i = 0; i < 10; i++) {
-        const j = Math.floor(Math.random() * fullArray.length - 1);
+        const j = Math.floor(Math.random() * fullArray.length);
         randomWords.push(fullArray[j]);
-        temp_value = fullArray[fullArray.length - 1];
+        const temp_value = fullArray[fullArray.length - 1];
         fullArray[fullArray.length - 1] = fullArray[j];
         fullArray[j] = temp_value;
         fullArray.pop();
     }
     return randomWords;
 }
+
 // Generate word buttons in the "wordDisplay" div
 function generateWordButtons(words) {
     const wordButtonsContainer = document.getElementById('wordButtons');
@@ -63,41 +73,55 @@ function generateWordButtons(words) {
     wordButtonsContainer.innerHTML = '';
 
     // Create buttons for each word
-    words.forEach((word, index) => {
+    words.forEach((wordObj, index) => {
         const button = document.createElement('button');
         button.textContent = `Word ${index + 1}`;
-        button.value = word; // Set the value to the corresponding word
-        button.addEventListener('click', () => speakWord(word)); // Attach a click event listener
+        button.value = wordObj.word; // Set the value to the corresponding word
+        button.addEventListener('click', () => speakWord(wordObj.word + ',' + wordObj.sentence)); // Attach a click event listener
         wordButtonsContainer.appendChild(button);
     });
-
-    //wordButtonsContainer.style.display = 'block';
 }
 
-// Speak a given word using the Web Speech API
-async function speakWord(word) {
+// Speak a given word and sentence using the Web Speech API
+async function speakWord(wordAndSentence) {
     // Check if the browser supports the SpeechSynthesis API
     if ('speechSynthesis' in window) {
-        // Create a SpeechSynthesisUtterance object
-        const utterance = new SpeechSynthesisUtterance();
+        // Split the input string into a word and a sentence
+        const [word, sentence] = wordAndSentence.split(',');
 
-        // Set the text to be spoken
-        utterance.text = word;
-        utterance.lang = 'en-US';
+        // Create a SpeechSynthesisUtterance object for the word
+        const utteranceWord = new SpeechSynthesisUtterance();
+        utteranceWord.text = word;
+        utteranceWord.lang = 'en-US';
+
+        // Create a SpeechSynthesisUtterance object for the sentence
+        const utteranceSentence = new SpeechSynthesisUtterance();
+        utteranceSentence.text = sentence;
+        utteranceSentence.lang = 'en-US';
+        utteranceSentence.rate = 0.8; // Slow down the rate of speech for the sentence
 
         // Use the default voice (you can customize this if needed)
         // Wait for the voices to be loaded before setting the voice
         if (speechSynthesis.getVoices().length === 0) {
             speechSynthesis.onvoiceschanged = function() {
-                utterance.voice = speechSynthesis.getVoices()[1];
+                utteranceWord.voice = speechSynthesis.getVoices()[1];
+                utteranceSentence.voice = speechSynthesis.getVoices()[1];
+
                 // Speak the word
-                speechSynthesis.speak(utterance);
+                speechSynthesis.speak(utteranceWord);
             };
         } else {
-            utterance.voice = speechSynthesis.getVoices()[1];
+            utteranceWord.voice = speechSynthesis.getVoices()[1];
+            utteranceSentence.voice = speechSynthesis.getVoices()[1];
+
             // Speak the word
-            speechSynthesis.speak(utterance);
+            speechSynthesis.speak(utteranceWord);
         }
+
+        // When the word has finished being spoken, speak the sentence
+        utteranceWord.onend = function() {
+            speechSynthesis.speak(utteranceSentence);
+        };
     } else {
         console.error('SpeechSynthesis API not supported in this browser.');
     }
