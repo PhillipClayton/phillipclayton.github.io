@@ -169,14 +169,14 @@ async function speakWord(wordAndSentence) {
         const utteranceWord = new SpeechSynthesisUtterance();
         utteranceWord.text = word;
         utteranceWord.lang = 'en-US';
-        utteranceWord.pitch = 1.5; // Increase the pitch
+        // utteranceWord.pitch = 1.5; // Increase the pitch
 
         // Create a SpeechSynthesisUtterance object for the sentence
         const utteranceSentence = new SpeechSynthesisUtterance();
         utteranceSentence.text = sentence;
         utteranceSentence.lang = 'en-US';
         utteranceSentence.rate = 0.8; // Slow down the rate of speech for the sentence
-        utteranceSentence.pitch = 1.5; // Increase the pitch
+        // utteranceSentence.pitch = 1.5; // Increase the pitch
 
         // Get the list of voices
         let voices = window.speechSynthesis.getVoices();
