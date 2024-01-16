@@ -165,34 +165,33 @@ async function speakWord(wordAndSentence) {
         // Split the input string into a word and a sentence
         const [word, sentence] = wordAndSentence.split(',');
 
-        // Create a SpeechSynthesisUtterance object for the word
+       // Create a SpeechSynthesisUtterance object for the word
         const utteranceWord = new SpeechSynthesisUtterance();
         utteranceWord.text = word;
         utteranceWord.lang = 'en-US';
+        utteranceWord.pitch = 1.5; // Increase the pitch
 
         // Create a SpeechSynthesisUtterance object for the sentence
         const utteranceSentence = new SpeechSynthesisUtterance();
         utteranceSentence.text = sentence;
         utteranceSentence.lang = 'en-US';
         utteranceSentence.rate = 0.8; // Slow down the rate of speech for the sentence
+        utteranceSentence.pitch = 1.5; // Increase the pitch
 
-        // Use the default voice (you can customize this if needed)
-        // Wait for the voices to be loaded before setting the voice
-        if (speechSynthesis.getVoices().length === 0) {
-            speechSynthesis.onvoiceschanged = function() {
-                utteranceWord.voice = speechSynthesis.getVoices()[1];
-                utteranceSentence.voice = speechSynthesis.getVoices()[1];
+        // Get the list of voices
+        let voices = window.speechSynthesis.getVoices();
 
-                // Speak the word
-                speechSynthesis.speak(utteranceWord);
-            };
-        } else {
-            utteranceWord.voice = speechSynthesis.getVoices()[1];
-            utteranceSentence.voice = speechSynthesis.getVoices()[1];
+        // Filter for American English voices
+        const usVoices = voices.filter(voice => voice.lang === 'en-US');
 
-            // Speak the word
-            speechSynthesis.speak(utteranceWord);
+        // Use the first available American English voice
+        if (usVoices.length > 0) {
+            utteranceWord.voice = usVoices[0];
+            utteranceSentence.voice = usVoices[0];
         }
+
+        // Speak the word
+        speechSynthesis.speak(utteranceWord);
 
         // When the word has finished being spoken, speak the sentence
         utteranceWord.onend = function() {
