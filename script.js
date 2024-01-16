@@ -65,21 +65,51 @@ function getRandomWordsFromArray(fullArray) {
     return randomWords;
 }
 
-// Generate word buttons in the "wordDisplay" div
+// Generate word buttons and input boxes in the "wordDisplay" div
 function generateWordButtons(words) {
     const wordButtonsContainer = document.getElementById('wordButtons');
 
-    // Clear existing buttons
+    // Clear existing buttons and input boxes
     wordButtonsContainer.innerHTML = '';
 
-    // Create buttons for each word
+    // Create buttons and input boxes for each word
     words.forEach((wordObj, index) => {
+        const div = document.createElement('div');
+
         const button = document.createElement('button');
         button.textContent = `Word ${index + 1}`;
-        button.value = index; // Set the value to the index of the word in the array
-        button.addEventListener('click', () => speakWord(words[button.value].word + ',' + words[button.value].sentence)); // Attach a click event listener
-        wordButtonsContainer.appendChild(button);
+        button.addEventListener('click', () => speakWord(wordObj.word + ',' + wordObj.sentence)); // Attach a click event listener
+
+        const input = document.createElement('input');
+        input.type = 'text';
+
+        const result = document.createElement('span');
+
+        div.appendChild(button);
+        div.appendChild(input);
+        div.appendChild(result);
+
+        wordButtonsContainer.appendChild(div);
     });
+
+    // Create the "Check Answers" button
+    const checkAnswersButton = document.createElement('button');
+    checkAnswersButton.textContent = 'Check Answers';
+    checkAnswersButton.addEventListener('click', () => {
+        const divs = wordButtonsContainer.children;
+        for (let i = 0; i < divs.length - 1; i++) { // -1 to exclude the checkAnswersButton
+            const input = divs[i].children[1]; // the input is the second child
+            const result = divs[i].children[2]; // the result span is the third child
+
+            if (input.value.toLowerCase() === words[i].word.toLowerCase()) {
+                result.textContent = '✅';
+            } else {
+                result.textContent = '❌';
+            }
+        }
+    });
+
+    wordButtonsContainer.appendChild(checkAnswersButton);
 }
 
 // Speak a given word and sentence using the Web Speech API
