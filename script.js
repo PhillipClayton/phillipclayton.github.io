@@ -92,22 +92,67 @@ function generateWordButtons(words) {
         wordButtonsContainer.appendChild(div);
     });
 
-    // Create the "Check Answers" button
-    const checkAnswersButton = document.createElement('button');
-    checkAnswersButton.textContent = 'Check Answers';
-    checkAnswersButton.addEventListener('click', () => {
-        const divs = wordButtonsContainer.children;
-        for (let i = 0; i < divs.length - 1; i++) { // -1 to exclude the checkAnswersButton
-            const input = divs[i].children[1]; // the input is the second child
-            const result = divs[i].children[2]; // the result span is the third child
+// Function to play a tone with a given frequency and duration, with optional oscillation
+function playTone(context, frequency, duration, oscillate = false) {
+    const oscillator = context.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.value = frequency;
 
-            if (input.value.toLowerCase() === words[i].word.toLowerCase()) {
-                result.textContent = '✅';
-            } else {
-                result.textContent = '❌';
-            }
+    if (oscillate) {
+        const gain = context.createGain();
+        gain.gain.value = 30; // The amplitude of the oscillation
+
+        const modulator = context.createOscillator();
+        modulator.type = 'sine';
+        modulator.frequency.value = 4; // The frequency of the oscillation
+
+        modulator.connect(gain);
+        gain.connect(oscillator.frequency);
+
+        modulator.start();
+        setTimeout(() => { modulator.stop(); }, duration);
+    }
+
+    oscillator.connect(context.destination);
+    oscillator.start();
+    setTimeout(() => { oscillator.stop(); }, duration);
+}
+
+// Create the "Check Answers" button
+const checkAnswersButton = document.createElement('button');
+checkAnswersButton.textContent = 'Check Answers';
+checkAnswersButton.addEventListener('click', () => {
+    const divs = wordButtonsContainer.children;
+    let allCorrect = true;
+    for (let i = 0; i < divs.length - 1; i++) { // -1 to exclude the checkAnswersButton
+        const input = divs[i].children[1]; // the input is the second child
+        const result = divs[i].children[2]; // the result span is the third child
+
+        if (input.value.toLowerCase() === words[i].word.toLowerCase()) {
+            result.textContent = '✅';
+        } else {
+            result.textContent = '❌';
+            allCorrect = false;
         }
-    });
+    }
+
+    // Play a three-tone sequence based on whether all answers are correct
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const duration_1 = 500; // Half a second
+    const duration_2 = 1500; // 1.5 seconds
+    const delay = 600; // Slightly longer than the duration to ensure the tones don't overlap
+    if (allCorrect) {
+        // Three ascending tones forming an A-major triad (A4, C#5, E5)
+        setTimeout(() => { playTone(context, 440, duration_1); }, 0); // A4
+        setTimeout(() => { playTone(context, 554.37, duration_1); }, delay); // C#5
+        setTimeout(() => { playTone(context, 659.25, duration_2); }, delay * 2); // E5
+    } else {
+        // Three descending tones starting with A4 and descending two whole steps (A4, G4, F4)
+        setTimeout(() => { playTone(context, 440, duration_1); }, 0); // A4
+        setTimeout(() => { playTone(context, 392, duration_1); }, delay); // G4
+        setTimeout(() => { playTone(context, 369.99, duration_2, true); }, delay * 2); // F4#
+    }
+});
 
     wordButtonsContainer.appendChild(checkAnswersButton);
 }
