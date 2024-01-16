@@ -186,8 +186,8 @@ async function speakWord(wordAndSentence) {
 
         // Use the first available American English voice
         if (usVoices.length > 0) {
-            utteranceWord.voice = usVoices[0];
-            utteranceSentence.voice = usVoices[0];
+            utteranceWord.voice = usVoices[1];
+            utteranceSentence.voice = usVoices[1];
         }
 
         // Speak the word
