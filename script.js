@@ -142,10 +142,11 @@ checkAnswersButton.addEventListener('click', () => {
     const duration_2 = 1500; // 1.5 seconds
     const delay = 600; // Slightly longer than the duration to ensure the tones don't overlap
     if (allCorrect) {
-        // Three ascending tones forming an A-major triad (A4, C#5, E5)
+        // Four ascending tones forming an A-major triad (A4, C#5, E5) + A5 (one octave higher)
         setTimeout(() => { playTone(context, 440, duration_1); }, 0); // A4
         setTimeout(() => { playTone(context, 554.37, duration_1); }, delay); // C#5
-        setTimeout(() => { playTone(context, 659.25, duration_2); }, delay * 2); // E5
+        setTimeout(() => { playTone(context, 659.25, duration_1); }, delay * 2); // E5
+        setTimeout(() => { playTone(context, 880, duration_2); }, delay * 3); // A5
     } else {
         // Three descending tones starting with A4 and descending two whole steps (A4, G4, F4)
         setTimeout(() => { playTone(context, 440, duration_1); }, 0); // A4
