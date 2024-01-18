@@ -125,8 +125,10 @@ checkAnswersButton.addEventListener('click', () => {
     const divs = wordButtonsContainer.children;
     let allCorrect = true;
     for (let i = 0; i < divs.length - 1; i++) { // -1 to exclude the checkAnswersButton
-        const input = divs[i].children[1]; // the input is the second child
+        let input = divs[i].children[1]; // the input is the second child
         const result = divs[i].children[2]; // the result span is the third child
+
+        input.value = input.value.replace(/\s+/g, ''); // Remove all whitespace from the input value
 
         if (input.value.toLowerCase() === words[i].word.toLowerCase()) {
             result.textContent = '✅';
